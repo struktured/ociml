@@ -2,11 +2,14 @@
 
 ANNOT=
 DEBUG=
-CCFLAGS	= -ccopt -I/usr/lib/ocaml -ccopt -I$(ORACLE_HOME)/rdbms/public -ccopt -Wall $(DEBUG)
+OCAML_INCLUDE=`opam config var lib`
+ORACLE_INCLUDE=/usr/include/oracle/11.2/client64
+ORACLE_LIB=/usr/lib/oracle/11.2/client64/lib
+CCFLAGS	= -ccopt -I${OCAML_INCLUDE} -ccopt -I${ORACLE_INCLUDE} -ccopt -Wall $(DEBUG)
 COBJS	= oci_common.o oci_connect.o oci_types.o oci_dml.o oci_select.o oci_aq.o oci_blob.o oci_out.o oci_bulkdml.o oci_dcn.o
 MLOBJS	= ociml_utils.cmo log_message.cmo report.cmo ociml.cmo
 MLOPTOBJS	= ociml_utils.cmx log_message.cmx report.cmx ociml.cmx
-CCLIBS  = -cclib -L$(ORACLE_HOME)/lib -cclib -lclntsh
+CCLIBS  = -cclib -L${ORACLE_LIB} -cclib -lclntsh
 
 OCAML_VERSION_MAJOR = `ocamlopt -version | cut -f1 -d.`
 OCAML_VERSION_MINOR = `ocamlopt -version | cut -f2 -d.`
@@ -42,10 +45,10 @@ shell: all
 	ocamlmktop -g -custom -o ocimlsh $(CCLIBS) unix.cma $(MLOBJS) $(COBJS)
 
 ociml.cma:	$(MLOBJS) $(COBJS)
-	ocamlmklib -verbose -o ociml -L$(ORACLE_HOME)/lib -lclntsh -cclib -lclntsh unix.cma $(MLOBJS) $(COBJS)
+	ocamlmklib -verbose -o ociml -L${ORACLE_LIB} -lclntsh -cclib -lclntsh unix.cma $(MLOBJS) $(COBJS)
 
 ociml.cmxa:	$(MLOPTOBJS) $(COBJS)
-	ocamlmklib -verbose -o ociml -L$(ORACLE_HOME)/lib -lclntsh -cclib -lclntsh $(MLOPTOBJS) $(COBJS)
+	ocamlmklib -verbose -o ociml -L$(ORACLE_LIB) -lclntsh -cclib -lclntsh $(MLOPTOBJS) $(COBJS)
 
 ociml.cmo:	ociml.ml
 	ocamlc $(ANNOT) -c -g  ociml.ml
