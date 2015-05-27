@@ -122,7 +122,7 @@ external oci_get_defined_string: oci_ptr -> string = "caml_oci_get_defined_strin
 external oci_get_date_as_double: oci_ptr -> float = "caml_oci_get_date_as_double"
 external oci_get_double: oci_handles -> oci_ptr -> float = "caml_oci_get_double"
 external oci_get_int: oci_handles -> oci_ptr -> int = "caml_oci_get_int"
-external oci_get_int_opt : oci_handles -> oci_ptr -> int option = "caml_oci_get_int"
+external oci_get_int_opt : oci_handles -> oci_ptr -> int option = "caml_oci_get_int_opt"
 
 (* C heap memory functions - oci_common.c *)
 external oci_alloc_c_mem: int -> oci_ptr = "caml_alloc_c_mem"
