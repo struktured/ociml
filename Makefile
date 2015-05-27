@@ -5,7 +5,7 @@ DEBUG=
 
 OCAML_INCLUDE=`opam config var lib`
 #ORACLE_HOME=
-#ORACLE_INCLUDE=${ORACLE_INCLUDE}
+#ORACLE_INCLUDE=
 ORACLE_LIB=${ORACLE_HOME}/lib
 CCFLAGS	= -ccopt -I${OCAML_INCLUDE} -ccopt -I${ORACLE_INCLUDE} -ccopt -Wall $(DEBUG)
 COBJS	= oci_common.o oci_connect.o oci_types.o oci_dml.o oci_select.o oci_aq.o oci_blob.o oci_out.o oci_bulkdml.o oci_dcn.o
