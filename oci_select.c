@@ -90,13 +90,15 @@ static struct custom_operations oci_defhandle_custom_ops = {"oci_defhandle_custo
 value caml_oci_define(value handles, value stmt, value pos, value dtype, value size) {
   CAMLparam5(handles, stmt, pos, dtype, size);
   CAMLlocal1(r);
-  r = caml_alloc_tuple(3);
+  r = caml_alloc_tuple(4);
   oci_handles_t h = Oci_handles_val(handles);
   OCIStmt* sth = Oci_statement_val(stmt);
   int p = Int_val(pos); /* C and OCaml count from 0, Oracle counts from 1 */
   
   int t = Int_val(Field(dtype, 0)); /* data type */
   int ii = Int_val(Field(dtype, 1)); /* is_int */
+  int is_null = Int_val(Field(dtype, 2)); /* is_null */
+
 
   int s = Int_val(size);
 
@@ -134,7 +136,8 @@ value caml_oci_define(value handles, value stmt, value pos, value dtype, value s
   
   Store_field(r, 0, Val_int(t));
   Store_field(r, 1, Val_bool(ii));
-  Store_field(r, 2, v);
+  Store_field(r, 2, Val_bool(is_null));
+  Store_field(r, 3, v);
 
   CAMLreturn(r);
 }

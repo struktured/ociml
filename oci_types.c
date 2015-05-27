@@ -12,6 +12,19 @@
 #include <oci.h>
 #include "oci_wrapper.h"
 
+#define Val_none Val_int(0)
+
+static value
+Val_some( value v )
+{   
+    CAMLparam1( v );
+    CAMLlocal1( some );
+    some = caml_alloc(1, 0);
+    Store_field( some, 0, v );
+    CAMLreturn( some );
+}
+
+
 /* convert an epoch time to an Oracle date */
 void epoch_to_ocidate(double e, OCIDate* ocidate) {
   time_t t = (time_t)e;
@@ -96,6 +109,5 @@ value caml_oci_get_int(value handles, value defs) {
 
   CAMLreturn(Val_int(r));
 }
-
 
 /* end of file */
