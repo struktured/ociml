@@ -122,6 +122,7 @@ external oci_get_defined_string: oci_ptr -> string = "caml_oci_get_defined_strin
 external oci_get_date_as_double: oci_ptr -> float = "caml_oci_get_date_as_double"
 external oci_get_double: oci_handles -> oci_ptr -> float = "caml_oci_get_double"
 external oci_get_int: oci_handles -> oci_ptr -> int = "caml_oci_get_int"
+external oci_get_int_opt : oci_handles -> oci_ptr -> int option = "caml_oci_get_int"
 
 (* C heap memory functions - oci_common.c *)
 external oci_alloc_c_mem: int -> oci_ptr = "caml_alloc_c_mem"
@@ -239,7 +240,7 @@ let oraprefetch_default = ref 10
 let oraprompt = ref "not connected > "
 
 (* set this to what you want NULLs to be returned as, e.g. Integer 0 or Varchar "" or Datetime 0.0 even! *)
-let internal_oranullval = ref (Integer 0)
+let internal_oranullval = ref Null
 let oranullval x =
   match x with
     |Null -> () (* ignore this request! *)
@@ -477,6 +478,8 @@ let oci_get_defined_date ptr =
   let d = oci_get_date_as_double ptr in
   localtime d
 
+let oci_is_null ptr = false
+
 (* call the underlying OCI fetch, advancing the cursor by one row, then extract 
    the data one column at a time from the define handles *)
 let orafetch_select sth = 
@@ -487,14 +490,18 @@ let orafetch_select sth =
       |_ -> oci_fetch sth.parent_lda.lda sth.sth);
     let row = Array.make sth.num_cols Null in
     (for i = 0 to (sth.num_cols - 1) do
-	let (dt, is_int, ptr) = Hashtbl.find sth.defined_vals (Pos i) in
-	match dt with
+	let (dt, is_int, (*is_null, *) ptr) = Hashtbl.find sth.defined_vals (Pos i) in
+        match dt with
 	  |1  -> row.(i) <- Varchar  (oci_get_defined_string ptr)
 	  |12 -> row.(i) <- Datetime (oci_get_defined_date ptr)
-	  |2 -> (* could be an int or a float *) 
+	  |2 -> (* could be an int or a float *)
 	    (debug(sprintf "col=%d type=%d is_int=%b" i dt is_int);
-	     match is_int with
-	      |true  -> row.(i) <- Integer (oci_get_int    sth.parent_lda.lda ptr)
+	     match is_int with             
+	      |true -> row.(i) <- 
+                begin
+                 debug(sprintf "int opt: %d" i);
+                 match oci_get_int_opt sth.parent_lda.lda ptr with Some n -> Integer n | None -> Null 
+                end
 	      |false -> row.(i) <- Number  (oci_get_double sth.parent_lda.lda ptr)
 	    )
 	  |_ -> debug(sprintf "orafetch unhandled type in row %d col=%d datatype=%d is_int=%b" sth.rows_affected i dt is_int);
