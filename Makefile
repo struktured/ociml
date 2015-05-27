@@ -2,9 +2,10 @@
 
 ANNOT=
 DEBUG=
+
 OCAML_INCLUDE=`opam config var lib`
-ORACLE_INCLUDE=/usr/include/oracle/11.2/client64
-ORACLE_LIB=/usr/lib/oracle/11.2/client64/lib
+ORACLE_INCLUDE=/usr/include/oracle/12.1/client64
+ORACLE_LIB=${ORACLE_HOME}/lib
 CCFLAGS	= -ccopt -I${OCAML_INCLUDE} -ccopt -I${ORACLE_INCLUDE} -ccopt -Wall $(DEBUG)
 COBJS	= oci_common.o oci_connect.o oci_types.o oci_dml.o oci_select.o oci_aq.o oci_blob.o oci_out.o oci_bulkdml.o oci_dcn.o
 MLOBJS	= ociml_utils.cmo log_message.cmo report.cmo ociml.cmo
