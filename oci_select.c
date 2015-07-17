@@ -136,7 +136,8 @@ value caml_oci_define(value handles, value stmt, value pos, value dtype, value s
   
   Store_field(r, 0, Val_int(t));
   Store_field(r, 1, Val_bool(ii));
-  Store_field(r, 2, Val_bool(defs.ind == -1));
+  int is_null = defs.ind < 0;
+  Store_field(r, 2, Val_bool(is_null));
   Store_field(r, 3, v);
 
   CAMLreturn(r);
