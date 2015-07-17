@@ -97,7 +97,7 @@ value caml_oci_define(value handles, value stmt, value pos, value dtype, value s
   
   int t = Int_val(Field(dtype, 0)); /* data type */
   int ii = Int_val(Field(dtype, 1)); /* is_int */
-  int is_null = Int_val(Field(dtype, 2)); /* is_null */
+//  int is_null = Int_val(Field(dtype, 2)); /* is_null */
 
 
   int s = Int_val(size);
@@ -105,7 +105,7 @@ value caml_oci_define(value handles, value stmt, value pos, value dtype, value s
   oci_define_t defs = { NULL, NULL, 0, 0.0, 0 };
   defs.dtype = dtype;
 
-  sword x;
+  sword x = -1;
   
 #ifdef DEBUG
   char dbuf[256]; snprintf(dbuf, 255, "caml_oci_define: defining for pos=%d dtype=%d is_int=%d size=%d", p + 1, t, ii, s); debug(dbuf);
@@ -136,7 +136,7 @@ value caml_oci_define(value handles, value stmt, value pos, value dtype, value s
   
   Store_field(r, 0, Val_int(t));
   Store_field(r, 1, Val_bool(ii));
-  Store_field(r, 2, Val_bool(is_null));
+  Store_field(r, 2, Val_bool(defs.ind == -1));
   Store_field(r, 3, v);
 
   CAMLreturn(r);
