@@ -480,8 +480,8 @@ let oci_get_defined_date ptr =
   let d = oci_get_date_as_double ptr in
   localtime d
 
-let ora_get_or_null nullable expr =
-  if nullable then Null else
+let ora_get_or_null null expr =
+  if null then Null else
   try expr () with Oci_exception (22060, _) -> Null
                                       
 (* call the underlying OCI fetch, advancing the cursor by one row, then extract 
