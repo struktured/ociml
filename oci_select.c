@@ -97,8 +97,6 @@ value caml_oci_define(value handles, value stmt, value pos, value dtype, value s
   
   int t = Int_val(Field(dtype, 0)); /* data type */
   int ii = Int_val(Field(dtype, 1)); /* is_int */
-//  int is_null = Int_val(Field(dtype, 2)); /* is_null */
-
 
   int s = Int_val(size);
 
