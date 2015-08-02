@@ -47,7 +47,7 @@ shell: all
 	ocamlmktop -g -custom -o ocimlsh $(CCLIBS) unix.cma $(MLOBJS) $(COBJS)
 
 ociml.cma:	$(MLOBJS) $(COBJS)
-	ocamlmklib -verbose -o ociml -L${ORACLE_LIB} -lclntsh -cclib -lclntsh unix.cma $(MLOBJS) $(COBJS)
+	ocamlmklib -verbose -o ociml -L${ORACLE_LIB} -lclntsh -cclib -lclntsh $(MLOBJS) $(COBJS)
 
 ociml.cmxa:	$(MLOPTOBJS) $(COBJS)
 	ocamlmklib -verbose -o ociml -L$(ORACLE_LIB) -lclntsh -cclib -lclntsh $(MLOPTOBJS) $(COBJS)
@@ -59,10 +59,10 @@ ociml.cmx:	ociml.ml
 	ocamlopt -c -g  ociml.ml
 
 %.cmo: %.ml
-	ocamlc $(ANNOT) -c -g unix.cma $<
+	ocamlc $(ANNOT) -c -g $<
 
 %.cmx: %.ml
-	ocamlopt -c -g unix.cmxa $<
+	ocamlopt -c -g $<
 
 %.o:	%.c oci_wrapper.h
 	ocamlc -g -ccopt -DOCAML_VERSION_MINOR=$(OCAML_VERSION_MINOR) -c $(CCFLAGS) $<
