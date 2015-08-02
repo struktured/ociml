@@ -3,8 +3,11 @@
 ANNOT=
 DEBUG=
 
+# Find the ocaml include directory using opam
 OCAML_INCLUDE=`opam config var lib`
+# Assume ORACLE_HOME is set by the environment
 #ORACLE_HOME=
+# Assume ORACLE_INCLUDE is set by the environment
 #ORACLE_INCLUDE=
 ORACLE_LIB=${ORACLE_HOME}/lib
 CCFLAGS	= -ccopt -I${OCAML_INCLUDE} -ccopt -I${ORACLE_INCLUDE} -ccopt -Wall $(DEBUG)
