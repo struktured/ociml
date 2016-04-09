@@ -1,8 +1,17 @@
 # Makefile for OCI*ML project
 
+ifeq ($(ORACLE_HOME), "")
+  ORACLE_HOME=/usr/lib/oracle/11.2/client64
+endif
+
+ifeq ($(ORACLE_INCLUDE), "")
+  ORACLE_INCLUDE=/usr/include/oracle/11.2/client64
+endif
+
+
 ANNOT=
 DEBUG=
-CCFLAGS	= -ccopt -I/usr/lib/ocaml -ccopt -I$(ORACLE_HOME)/rdbms/public -ccopt -Wall $(DEBUG)
+CCFLAGS	= -ccopt -I/usr/lib/ocaml -ccopt -I$(ORACLE_INCLUDE) -ccopt -Wall $(DEBUG)
 COBJS	= oci_common.o oci_connect.o oci_types.o oci_dml.o oci_select.o oci_aq.o oci_blob.o oci_out.o oci_bulkdml.o oci_dcn.o
 MLOBJS	= ociml_utils.cmo log_message.cmo report.cmo ociml.cmo
 MLOPTOBJS	= ociml_utils.cmx log_message.cmx report.cmx ociml.cmx
@@ -28,7 +37,7 @@ clean:
 	cd tests; make clean
 
 install:
-	ocamlfind install ociml META ociml.a ociml.cma ociml.cmxa ociml.cmi  dllociml.so libociml.a
+	ocamlfindtinstall ociml META ociml.a ociml.cma ociml.cmxa ociml.cmi  dllociml.so libociml.a
 
 uninstall:
 	ocamlfind remove ociml

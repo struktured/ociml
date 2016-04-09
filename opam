@@ -16,8 +16,13 @@ install: [
 ]
 
 remove: [
- ["ocamlfind" "remove" "ociml"]
+  ["ocamlfind" "remove" "ociml"]
 ]
 
 depends: [
+]
+
+depexts: [
+  [["ubuntu"] ["oracle-instantclient11.2-devel"]]
+  [["debian"] ["oracle-instantclient11.2-devel"]]
 ]
